@@ -1,7 +1,0 @@
-curl http://localhost:3000
-curl http://localhost:3000/chats
-curl -X POST http://localhost:3000/chats -H "Content-Type: application/json" -d '{"name": "First Chat"}'
-curl -X PUT http://localhost:3000/chats/{id} -H "Content-Type: application/json" -d '{"name": "Renamed First Chat"}'
-curl http://localhost:3000/chats/id/messages
-curl -X DELETE http://localhost:3000/chats/{id}
-curl -X POST http://localhost:3000/chats/{id}/messages -H "Content-Type: application/json" -d '{"message": "Hello, World!"}'
