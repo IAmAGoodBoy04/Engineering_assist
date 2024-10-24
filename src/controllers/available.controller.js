@@ -7,10 +7,9 @@ exports.addCollege = async (req, res) => {
     const college = new AvailableCollege({ name: req.body.name });
     await college.save();
 
-    await mongoose.connection.createCollection(req.body.name);
-
     res.status(201).send({ message: 'College added successfully' });
   } catch (error) {
+    console.log(error);
     res.status(500).send({ message: 'Error adding college', error: error.message });
   }
 };

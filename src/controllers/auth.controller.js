@@ -43,3 +43,20 @@ exports.login = async (req, res) => {
         res.status(500).send({ message: 'Error on the server', error: error.message });
     }
 };
+
+exports.checkAdmin = async (req, res) => {
+    try {
+      const user = await User.findById(req.userId);
+      if (!user) {
+        return res.status(404).send({ message: 'User not found' });
+      }
+  
+      if (user.isAdmin) {
+        return res.status(200).send({ message: 'User is an admin' });
+      } else {
+        return res.status(250).send({ message: 'User is not an admin' });
+      }
+    } catch (error) {
+      res.status(500).send({ message: 'Error checking admin status', error: error.message });
+    }
+  };
