@@ -10,8 +10,10 @@ const urlRoutes = require('./routes/url.routes'); // Add this line
 
 const app = express();
 const corsOptions = {
-  origin: 'https://iamagoodboy04.github.io',
-  credentials: true,
+  origin: '*',
+  credentials: false,
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 };
 
 app.use(cors(corsOptions));
@@ -20,7 +22,7 @@ app.use(bodyParser.json());
 app.use('/auth', authRoutes);
 app.use('/chats', chatRoutes);
 app.use('/available', availableRoutes);
-app.use('/', urlRoutes); // Add this line
+app.use('/', urlRoutes);
 
 app.get('/', (req, res) => {
   res.send("Nothing on this path\n");
