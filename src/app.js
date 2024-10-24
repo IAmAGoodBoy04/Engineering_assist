@@ -10,8 +10,8 @@ const urlRoutes = require('./routes/url.routes'); // Add this line
 
 const app = express();
 const corsOptions = {
-  origin: '*',
-  credentials: false,
+  origin: 'https://iamagoodboy04.github.io',
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
