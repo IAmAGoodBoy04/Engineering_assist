@@ -43,7 +43,7 @@ exports.deleteChat = async (req, res) => {
 
 exports.sendMessage = async (req, res) => {
     try{
-    const chat = await Chat.findOne({ _id: req.params.id, owner: req.query.userId });
+    const chat = await Chat.findOne({ _id: req.params.id, owner: req.userId }).populate('messages');
     if (!chat) {
         return res.status(404).send('Chat not found or you do not have permission');
     }
@@ -52,14 +52,18 @@ exports.sendMessage = async (req, res) => {
     const userMessage = new Message({ user: user.username, message: req.body.message });
     await userMessage.save();
     chat.messages.push(userMessage);
+    console.log(chat.messages+"hi");
 
     // Prepare the history of the last 10 messages
     let history = [];
-    if(chat.messages.length > 10) {
-        history = chat.messages.slice(-10).map(msg => {
-            return msg.user === 'assistant' ? { "assistant": msg.message } : { "human": msg.message };
-        });
-    }
+        const messages = chat.messages.slice(-20); // Get the last 20 messages to ensure we have pairs
+        for (let i = 0; i < messages.length; i += 2) {
+            if (messages[i] && messages[i + 1]) {
+                const humanMessage = messages[i].user !== 'assistant' ? messages[i].message : messages[i + 1].message;
+                const aiMessage = messages[i].user === 'assistant' ? messages[i].message : messages[i + 1].message;
+                history.push({ human: humanMessage, assistant: aiMessage });
+            }
+        }
 
     // Make the POST request to FLASK_URL/query
     const response = await axios.post(`${process.env.FLASK_URL}/query`, {
