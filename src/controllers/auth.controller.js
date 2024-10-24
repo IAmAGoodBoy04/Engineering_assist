@@ -13,12 +13,19 @@ exports.signup = async (req, res) => {
         await user.save();
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: 7200 }); // 2 hours
-        res.cookie('token', token, { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
-        res.cookie('userId', user._id.toString(), { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
-        res.cookie('email', user.email, { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
-        res.cookie('username', user.username, { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
-        console.log(res);
-        res.status(201).send({ message: 'User registered successfully' });
+        // res.cookie('token', token, { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
+        // res.cookie('userId', user._id.toString(), { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
+        // res.cookie('email', user.email, { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
+        // res.cookie('username', user.username, { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
+        // console.log(res);
+        res.status(200).json({
+          auth: true,
+          token: token,
+          userId: user._id,
+          email: user.email,
+          username: user.username,
+          message: 'User registered successfully'
+        });
     } catch (error) {
         res.status(500).send({ message: 'Error registering user', error: error.message });
     }
@@ -32,13 +39,20 @@ exports.login = async (req, res) => {
         const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
         if (!passwordIsValid) return res.status(401).send({ auth: false, token: null, message: 'Invalid password' });
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: 7200 }); // 2 hours
-        res.cookie('token', token, { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
-        res.cookie('userId', user._id.toString(), { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
-        res.cookie('email', user.email, { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
-        res.cookie('username', user.username, { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
-        console.log(token);
-        res.status(200).send({ auth: true, token: token });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: 7200 }); 
+        // res.cookie('token', token, { httpOnly: false, maxAge: 7200000 }); 
+        // res.cookie('userId', user._id.toString(), { httpOnly: false, maxAge: 7200000 });
+        // res.cookie('email', user.email, { httpOnly: false, maxAge: 7200000 }); 
+        // res.cookie('username', user.username, { httpOnly: false, maxAge: 7200000 });
+
+        // console.log(token);
+        res.status(200).json({
+          auth: true,
+          token: token,
+          userId: user._id,
+          email: user.email,
+          username: user.username
+        });
     } catch (error) {
         res.status(500).send({ message: 'Error on the server', error: error.message });
     }
