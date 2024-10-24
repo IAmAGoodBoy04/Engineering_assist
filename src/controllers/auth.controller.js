@@ -17,7 +17,7 @@ exports.signup = async (req, res) => {
         res.cookie('userId', user._id.toString(), { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
         res.cookie('email', user.email, { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
         res.cookie('username', user.username, { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
-        
+        console.log(res);
         res.status(201).send({ message: 'User registered successfully' });
     } catch (error) {
         res.status(500).send({ message: 'Error registering user', error: error.message });
@@ -37,7 +37,7 @@ exports.login = async (req, res) => {
         res.cookie('userId', user._id.toString(), { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
         res.cookie('email', user.email, { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
         res.cookie('username', user.username, { httpOnly: false, maxAge: 7200000 }); // 2 hours in milliseconds
-
+        console.log(token);
         res.status(200).send({ auth: true, token: token });
     } catch (error) {
         res.status(500).send({ message: 'Error on the server', error: error.message });

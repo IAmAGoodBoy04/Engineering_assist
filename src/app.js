@@ -10,8 +10,8 @@ const urlRoutes = require('./routes/url.routes'); // Add this line
 
 const app = express();
 const corsOptions = {
-  origin: 'http://localhost:5500',
-  credentials: true
+  origin: 'http://127.0.0.1:5500',
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
