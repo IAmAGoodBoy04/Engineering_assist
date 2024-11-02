@@ -18,7 +18,7 @@ exports.addTextbook = async (req, res) => {
   try {
     const textbook = new AvailableTextbook({
       name: req.body.name,
-      userID: req.body.userId
+      userID: req.userId
     });
     await textbook.save();
     res.status(201).send({ message: 'Textbook added successfully' });

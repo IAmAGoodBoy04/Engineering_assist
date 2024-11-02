@@ -87,7 +87,8 @@ exports.sendMessage = async (req, res) => {
 };
 
 exports.getChats = async (req, res) => {
-    const { userId, topic } = req.query;
+    const topic = req.params.topic;
+    const userId = req.userId;
     const chats = await Chat.find({ owner: userId, topic: topic }, 'name');
     if (chats.length === 0) {
         res.send('No chats available');
@@ -99,7 +100,7 @@ exports.getChats = async (req, res) => {
 
 exports.getMessages = async (req, res) => {
     try {
-    const chat = await Chat.findOne({ _id: req.params.id, owner: req.userId }).populate('messages');
+    const chat = await Chat.findOne({ _id: req.userId, owner: req.userId }).populate('messages');
     if (!chat) {
         console.log(chat);
         return res.status(404).send('Chat not found or you do not have permission');
