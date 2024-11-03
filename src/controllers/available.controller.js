@@ -21,7 +21,7 @@ exports.addTextbook = async (req, res) => {
       userID: req.userId
     });
     await textbook.save();
-    res.status(201).send({ message: 'Textbook added successfully' });
+    res.status(201).send({ message: 'Textbook added successfully', textbook: textbook });
   } catch (error) {
     console.log(req.body);
     console.log(error);

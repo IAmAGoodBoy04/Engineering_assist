@@ -52,7 +52,6 @@ exports.sendMessage = async (req, res) => {
     const userMessage = new Message({ user: user.username, message: req.body.message });
     await userMessage.save();
     chat.messages.push(userMessage);
-    console.log(chat.messages+"hi");
 
     // Prepare the history of the last 10 messages
     let history = [];
@@ -87,7 +86,7 @@ exports.sendMessage = async (req, res) => {
 };
 
 exports.getChats = async (req, res) => {
-    const topic = req.params.topic;
+    const topic = req.query.topic;
     const userId = req.userId;
     const chats = await Chat.find({ owner: userId, topic: topic }, 'name');
     if (chats.length === 0) {
