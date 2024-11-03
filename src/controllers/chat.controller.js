@@ -100,9 +100,8 @@ exports.getChats = async (req, res) => {
 
 exports.getMessages = async (req, res) => {
     try {
-    const chat = await Chat.findOne({ _id: req.userId, owner: req.userId }).populate('messages');
+    const chat = await Chat.findOne({ _id: req.params.id, owner: req.userId }).populate('messages');
     if (!chat) {
-        console.log(chat);
         return res.status(404).send('Chat not found or you do not have permission');
     }
 
