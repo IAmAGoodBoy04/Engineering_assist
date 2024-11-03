@@ -35,10 +35,18 @@ exports.renameChat = async (req, res) => {
         res.status(500).send({ message: 'Error renaming chat', error: error.message });
     }
 };
+
 exports.deleteChat = async (req, res) => {
-    const result = await Chat.findOneAndDelete({ _id: req.params.id, owner: req.userId });
-    if (!result) return res.status(404).send('Chat not found or you do not have permission');
-    res.status(204).send();
+    try {
+        const chat = await Chat.findOneAndDelete({ _id: req.params.id, owner: req.userId });
+        if (!chat) return res.status(404).send('Chat not found or you do not have permission');
+
+        await Message.deleteMany({ _id: { $in: chat.messages } });
+
+        res.status(204).send();
+    } catch (error) {
+        res.status(500).send({ message: 'Error deleting chat', error: error.message });
+    }
 };
 
 exports.sendMessage = async (req, res) => {
@@ -92,7 +100,7 @@ exports.getChats = async (req, res) => {
     if (chats.length === 0) {
         res.send('No chats available');
     } else {
-        const chatList = chats.map(chat => ({ name: chat.name, id: chat._id }));
+        const chatList = chats.map(chat => ({ name: chat.name, _id: chat._id }));
         res.status(200).json(chatList);
     }
 };
